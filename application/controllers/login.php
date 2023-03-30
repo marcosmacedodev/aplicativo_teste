@@ -14,17 +14,15 @@ class Login extends CI_Controller{
 
     public function autenticar()
     {
+        if($this->session->userdata('ip_blocked_time') && 
+        $this->session->userdata('ip_blocked_time') > time())
+        {
+            redirect('login');
+        } 
         $this->load->helper('url');
         $usuario = $this->input->post('usuario');
         $senha = $this->input->post('senha');
         $resultado = $this->login_model->validar_usuario($usuario, $senha);
-        if($this->session->userdata('ip_blocked_time') && 
-        $this->session->userdata('ip_blocked_time') > time())
-        {
-            die('<p>Voc&ecirc; errou sua senha 3 vezes seguidas.</p> 
-            <p>Seu endere&ccedil;o IP foi bloqueado.</p> 
-            <p>Tente novamente em '. ($this->session->userdata('ip_blocked_time') - time()) . " segundos</p>");
-        } 
         if ($resultado)
         {
             switch($resultado->status)
