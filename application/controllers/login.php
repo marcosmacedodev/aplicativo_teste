@@ -30,6 +30,7 @@ class Login extends CI_Controller{
                 case 2: 
                     $this->session->set_flashdata('erro_login', 'Sua conta está bloqueada! Contate o Administrador');
                     redirect('login');
+                case 0:
                 case 1: 
                     $data = array(
                     'usuario' => $resultado->usuario,
