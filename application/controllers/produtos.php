@@ -40,9 +40,18 @@ class Produtos extends CI_Controller{
         }
         else
         {
-            $id = $this->produtos_model->set_produtos();
-            $this->load->view('produtos/success', array('message' => 'Produto criado com sucesso.'));
-            $this->load->view('produtos/create');
+            if($this->session->userdata('status') == 0)
+            {
+                $this->load->view('pedidos/warning', array(
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            else
+            {
+                $id = $this->produtos_model->set_produtos();
+                $this->load->view('produtos/success', array('message' => 'Produto criado com sucesso.'));
+                $this->load->view('produtos/create');
+            }
         }
         $this->load->view('templates/footer');
     }
@@ -69,9 +78,18 @@ class Produtos extends CI_Controller{
         }
         else
         {
-            $this->produtos_model->update_produtos($id);
-            $this->load->view('produtos/success', array('message' => 'Produto atualizado criado com sucesso.'));
-            $this->load->view('produtos/update');  
+            if($this->session->userdata('status') == 0)
+            {
+                $this->load->view('pedidos/warning', array(
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            else
+            {
+                $this->produtos_model->update_produtos($id);
+                $this->load->view('produtos/success', array('message' => 'Produto atualizado criado com sucesso.'));
+                $this->load->view('produtos/update');
+            }  
         }
         $this->load->view('templates/footer');
     }

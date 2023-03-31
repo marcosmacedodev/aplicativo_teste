@@ -39,8 +39,17 @@ class Pedidos extends CI_Controller{
         }
         else
         {
-            $pedido_ID = $this->pedidos_model->set_pedidos();
-            redirect('pedidos/update/' .$pedido_ID);
+            if($this->session->userdata('status') == 0)
+            {
+                $this->load->view('pedidos/warning', array(
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            else
+            {
+                $pedido_ID = $this->pedidos_model->set_pedidos();
+                redirect('pedidos/update/' .$pedido_ID);
+            }
         }
         $this->load->view('templates/footer');
     }
@@ -72,10 +81,16 @@ class Pedidos extends CI_Controller{
             $status = $this->input->post('status');
             $colaborador_ID = $this->session->userdata('id');
             $pedido = $this->pedidos_model->get__pedido($id, $colaborador_ID);
-            if ($status == 0 and empty($itens))
+            if($this->session->userdata('status') == 0)
             {
                 $this->load->view('pedidos/warning', array(
-                    'message' => "Não é possível finalizar o pedido ({$id}). Deve haver ao menos um item vinculado ao pedido."
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            elseif ($status == 0 and empty($itens))
+            {
+                $this->load->view('pedidos/warning', array(
+                    'message' => "N&atilde;o é poss&iacute;vel finalizar o pedido ({$id}). Deve haver ao menos um item vinculado ao pedido."
                 ));
 
             }
@@ -100,6 +115,14 @@ class Pedidos extends CI_Controller{
         $itens = $this->pedidos_model->get_itens_por_pedidos($id);
         $colaborador_ID = $this->session->userdata('id');
         $pedidos = $this->pedidos_model->get__pedido($id, $colaborador_ID);
+        if($this->session->userdata('status') == 0)
+        {
+            $this->index();
+            $this->load->view('pedidos/warning', array(
+                'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+            ));
+            return;
+        }
         if (!empty($itens))
         {
             $this->index();
@@ -108,7 +131,7 @@ class Pedidos extends CI_Controller{
             ));
             return;
         }
-        elseif (empty($pedidos))
+        if (empty($pedidos))
         {
             $this->index();
             $this->load->view('pedidos/warning', array(
@@ -136,16 +159,36 @@ class Pedidos extends CI_Controller{
 
     public function delete_item($id)
     {
-        $item = $this->get_item($id);
-        $this->pedidos_model->delete_item($id);
-        redirect('pedidos/update/' . $item['pedido_ID']);
+        if($this->session->userdata('status') == 0)
+        {
+            $this->load->view('templates/header', array('title' => ''));
+            $this->load->view('pedidos/warning', array(
+                'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+            ));
+        }
+        else
+        {
+            $item = $this->get_item($id);
+            $this->pedidos_model->delete_item($id);
+            redirect('pedidos/update/' . $item['pedido_ID']);
+        }
     }
 
     public function update_item($id)
     {
-        $item = $this->get_item($id);
-        $this->pedidos_model->update_item($id);
-        redirect('pedidos/update/' . $item['pedido_ID']);
+        if($this->session->userdata('status') == 0)
+        {
+            $this->load->view('templates/header', array('title' => ''));
+            $this->load->view('pedidos/warning', array(
+                'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+            ));
+        }
+        else
+        {
+            $item = $this->get_item($id);
+            $this->pedidos_model->update_item($id);
+            redirect('pedidos/update/' . $item['pedido_ID']);
+        }
     }
 
     public function create_item($pedido_ID)
@@ -163,8 +206,18 @@ class Pedidos extends CI_Controller{
         }
         else
         {
-            $this->pedidos_model->adicionar_item($pedido_ID);
-            redirect('pedidos/update/'.$pedido_ID);
+            if($this->session->userdata('status') == 0)
+            {
+                $this->load->view('templates/header', array('title' => ''));
+                $this->load->view('pedidos/warning', array(
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            else
+            {
+                $this->pedidos_model->adicionar_item($pedido_ID);
+                redirect('pedidos/update/'.$pedido_ID);
+            }
         }
     }
 

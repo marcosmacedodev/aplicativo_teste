@@ -36,6 +36,7 @@ class Login extends CI_Controller{
                     'usuario' => $resultado->usuario,
                     'id' => $resultado->colaborador_ID,
                     'tipo' => $resultado->tipo,
+                    'status' => $resultado->status,
                     'nome' => $resultado->nome,
                     'sobrenome' => $resultado->sobrenome,
                     'logged_in' => true

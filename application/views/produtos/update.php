@@ -15,7 +15,7 @@ if (!$this->session->userdata('logged_in')) redirect(site_url('login'));
         </div>
         <div class="col-3">
             <label class="form-label" for="preco">Pre&ccedil;o</label>
-            <input type="number" class="form-control" name="preco" value="<?php echo $produtos['preco'] ?>"/>
+            <input type="text" class="form-control" name="preco" value="<?php echo $produtos['preco'] ?>"/>
         </div>
         <div class="col-3">
             <label class="form-label" for="estoque">Em estoque</label>

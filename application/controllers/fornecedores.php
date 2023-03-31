@@ -40,9 +40,18 @@ class Fornecedores extends CI_Controller{
         }
         else
         {
-            $this->fornecedores_model->set_fornecedores();
-            $this->load->view('fornecedores/success', array('message' => 'Fornecedor criado com sucesso.'));
-            $this->load->view('fornecedores/create');
+            if($this->session->userdata('status') == 0)
+            {
+                $this->load->view('pedidos/warning', array(
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            else
+            {
+                $this->fornecedores_model->set_fornecedores();
+                $this->load->view('fornecedores/success', array('message' => 'Fornecedor criado com sucesso.'));
+                $this->load->view('fornecedores/create');
+            }
         }
         $this->load->view('templates/footer');
     }
@@ -72,9 +81,18 @@ class Fornecedores extends CI_Controller{
         }
         else
         {
-            $this->fornecedores_model->update_fornecedor($id);
-            $this->load->view('fornecedores/success', array('message' => 'Atualização realizado com sucesso.'));
-            $this->load->view('fornecedores/update', $data);
+            if($this->session->userdata('status') == 0)
+            {
+                $this->load->view('pedidos/warning', array(
+                    'message' => "Voc&ecirc; n&atilde;o tem permiss&atilde;o para esse tipo de fun&ccedil;&atilde;o"
+                ));
+            }
+            else
+            {
+                $this->fornecedores_model->update_fornecedor($id);
+                $this->load->view('fornecedores/success', array('message' => 'Atualização realizado com sucesso.'));
+                $this->load->view('fornecedores/update', $data);
+            }
         }
         $this->load->view('templates/footer');
     }
